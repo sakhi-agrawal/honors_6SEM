@@ -3,12 +3,7 @@ pipeline {
 
     tools {
         maven 'maven'
-        jdk 'jdk-23'
-    }
-
-    environment {
-        JAVA_HOME = '/Library/Java/JavaVirtualMachines/jdk-23.jdk/Contents/Home'
-        PATH = "${JAVA_HOME}/bin:${PATH}"
+        jdk 'jdk-17'
     }
 
     stages {
@@ -39,11 +34,11 @@ pipeline {
         stage('Code Coverage') {
             steps {
                 sh 'mvn verify'
-                jacoco(
-                    execPattern: '**/target/jacoco.exec',
-                    classPattern: '**/target/classes',
-                    sourcePattern: '**/src/main/java'
-                )
+                publishHTML(target: [
+                    reportDir: 'target/site/jacoco',
+                    reportFiles: 'index.html',
+                    reportName: 'JaCoCo Coverage Report'
+                ])
             }
         }
     }
