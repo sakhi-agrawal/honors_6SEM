@@ -1,9 +1,9 @@
 pipeline {
-    agent {
-        docker {
-            image 'maven:3.9.6-eclipse-temurin-17'
-            args '-v $HOME/.m2:/root/.m2'
-        }
+    agent any
+
+    tools {
+        maven 'Maven'
+        jdk 'JDK'
     }
 
     stages {
@@ -14,12 +14,24 @@ pipeline {
         }
 
         stage('Build') {
+            agent {
+                docker {
+                    image 'maven:3.9.6-eclipse-temurin-17'
+                    reuseNode true
+                }
+            }
             steps {
                 sh 'mvn clean package -DskipTests'
             }
         }
 
         stage('Test') {
+            agent {
+                docker {
+                    image 'maven:3.9.6-eclipse-temurin-17'
+                    reuseNode true
+                }
+            }
             steps {
                 sh 'mvn test'
             }
