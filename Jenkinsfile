@@ -3,7 +3,12 @@ pipeline {
 
     tools {
         maven 'maven'
-        jdk 'JDK'
+        jdk 'jdk-23'
+    }
+
+    environment {
+        JAVA_HOME = '/Library/Java/JavaVirtualMachines/jdk-23.jdk/Contents/Home'
+        PATH = "${JAVA_HOME}/bin:${PATH}"
     }
 
     stages {
@@ -15,6 +20,7 @@ pipeline {
 
         stage('Build') {
             steps {
+                sh 'java -version'
                 sh 'mvn clean package -DskipTests'
             }
         }
